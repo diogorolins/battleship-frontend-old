@@ -29,7 +29,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoginForm = (props) => {
-  const { submitFormLogin, login, password, fillFormFields } = props;
+  const {
+    submitFormLogin,
+    login,
+    passwordLogin,
+    fillFormFields,
+    openModalSignin,
+  } = props;
 
   const classes = useStyles();
 
@@ -59,12 +65,12 @@ const LoginForm = (props) => {
             margin="normal"
             required
             fullWidth
-            name="password"
+            name="passwordLogin"
             label="Senha"
             type="password"
-            id="password"
+            id="passwordLogin"
             autoComplete="current-password"
-            value={password}
+            value={passwordLogin}
             onChange={fillFormFields}
           />
           <Button
@@ -84,7 +90,7 @@ const LoginForm = (props) => {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="#" variant="body2" onClick={openModalSignin}>
                 {"Criar nova conta"}
               </Link>
             </Grid>
