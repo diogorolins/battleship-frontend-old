@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const urlBase = "http://192.168.0.116:8080";
+const urlBase = "http://192.168.15.11:8080";
 //const urlBase = "http://localhost:8080";
 
 const api = axios.create({
@@ -10,10 +10,10 @@ const api = axios.create({
 const ApiService = {
   login: async (creds) => await api.post("auth", creds),
   saveUser: async (user) =>
-    api.post("players", user).catch((error) => error.response),
+    await api.post("players", user).catch((error) => error.response),
 
   logoff: async (id, token) =>
-    api.patch(
+    await api.patch(
       `auth/logoff/${id}`,
       {},
       {
@@ -21,27 +21,27 @@ const ApiService = {
       }
     ),
   getUser: async (email, token) =>
-    api.get(`players/email?email=${email}`, {
+    await api.get(`players/email?email=${email}`, {
       headers: { Authorization: "Bearer " + token },
     }),
   getLoggedPlayers: async (token) =>
-    api.get("players/logged", {
+    await api.get("players/logged", {
       headers: { Authorization: "Bearer " + token },
     }),
   invitePlayer: async (playerInvited, token) =>
-    api.post("players/invite", playerInvited, {
+    await api.post("players/invite", playerInvited, {
       headers: { Authorization: "Bearer " + token },
     }),
   getInvitesSent: async (token) =>
-    api.get("players/invite/sent", {
+    await api.get("players/invite/sent", {
       headers: { Authorization: "Bearer " + token },
     }),
   getInvitesReceived: async (token) =>
-    api.get("players/invite/received", {
+    await api.get("players/invite/received", {
       headers: { Authorization: "Bearer " + token },
     }),
   declineInvite: async (id, token) => {
-    api.patch(
+    await api.patch(
       `players/invite/decline/${id}`,
       {},
       {
@@ -49,5 +49,28 @@ const ApiService = {
       }
     );
   },
+  acceptInvite: async (id, token) => {
+    return await api.patch(
+      `players/invite/accept/${id}`,
+      {},
+      {
+        headers: { Authorization: "Bearer " + token },
+      }
+    );
+  },
+  getShipTypes: async (token) =>
+    await api.get("ships/types", {
+      headers: { Authorization: "Bearer " + token },
+    }),
+
+  sendShips: async (gameId, ships, token) => {
+    return await api.put(`games/${gameId}`, ships, {
+      headers: { Authorization: "Bearer " + token },
+    });
+  },
+  getGame: async (gameId, token) =>
+    await api.get(`games/${gameId}`, {
+      headers: { Authorization: "Bearer " + token },
+    }),
 };
 export default ApiService;

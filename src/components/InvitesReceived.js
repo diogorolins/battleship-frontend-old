@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 const InvitesReceived = (props) => {
   const classes = useStyles();
-  const { invitesReceived, declineInvite } = props;
+  const { invitesReceived, declineInvite, acceptInvite } = props;
 
   return (
     <div className={classes.root}>
@@ -53,7 +53,11 @@ const InvitesReceived = (props) => {
             <AccordionDetails className={classes.detail}>
               <Typography>{invite.from.email}</Typography>
               <div>
-                <Button variant="contained" color="primary">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => acceptInvite(invite.id)}
+                >
                   Aceitar
                 </Button>
                 <Button

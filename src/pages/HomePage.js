@@ -17,13 +17,14 @@ class Home extends React.Component {
     },
     loggedPlayers: [],
     invitesSent: [],
-    invitesRece: [],
+    invitesReceived: [],
+    gameId: "",
   };
   token = getToken().token;
 
   componentDidMount() {
     if (!isAuthenticated()) {
-      this.props.history.push("/login");
+      this.props.history.push("/");
     } else {
       this.getPlayer();
       this.getLoggedPlayers();
@@ -55,7 +56,7 @@ class Home extends React.Component {
     this.setState({
       loggedPlayers: response.data,
     });
-    //this.getLoggedPlayers();
+    this.getLoggedPlayers();
   };
 
   invitePlayer = async (playerId) => {
@@ -75,7 +76,7 @@ class Home extends React.Component {
     this.setState({
       invitesSent: response.data,
     });
-    // this.invitesSent();
+    this.invitesSent();
   };
 
   invitesReceived = async () => {
@@ -83,14 +84,14 @@ class Home extends React.Component {
     this.setState({
       invitesReceived: response.data,
     });
-    //this.invitesReceived();
+    this.invitesReceived();
   };
 
   logoutUser = async (id) => {
     try {
       await ApiService.logoff(id, this.token);
       logout();
-      this.props.history.push("/login");
+      this.props.history.push("/");
     } catch (e) {
       console.log(e);
     }
@@ -105,21 +106,45 @@ class Home extends React.Component {
     }
   };
 
+  acceptInvite = async (id) => {
+    try {
+      const response = await ApiService.acceptInvite(id, this.token);
+      this.props.history.push({
+        pathname: "/gameconfig",
+        state: { game: response.data.game.id },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  beginGame = (gameId) => {
+    this.props.history.push({
+      pathname: "/gameconfig",
+      state: { game: gameId },
+    });
+  };
+
   render() {
     const { player, loggedPlayers, invitesSent, invitesReceived } = this.state;
     return (
       <>
-        <Header logoutUser={this.logoutUser} player={player} />
+        <Header
+          logoutUser={this.logoutUser}
+          player={player}
+          invitesReceived={invitesReceived.length}
+        />
         <InvitesReceived
           invitesReceived={invitesReceived}
           declineInvite={this.declineInvite}
+          acceptInvite={this.acceptInvite}
         />
         <LoggedPlayers
           loggedPlayers={loggedPlayers}
           invitePlayer={this.invitePlayer}
           invitesSent={invitesSent}
         />
-        <InvitedSent invitesSent={invitesSent} />
+        <InvitedSent invitesSent={invitesSent} beginGame={this.beginGame} />
       </>
     );
   }

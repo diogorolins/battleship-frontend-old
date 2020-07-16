@@ -5,6 +5,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,35 +24,47 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
   },
+  begin: {
+    marginLeft: "20px",
+  },
 }));
 
 const InvitedSent = (props) => {
   const classes = useStyles();
-  const { invitesSent } = props;
+  const { invitesSent, beginGame } = props;
 
   return (
     <>
       <h1 className={classes.h1}>Convites Enviados</h1>
       <List className={classes.root}>
-        {invitesSent.map((player) => (
-          <>
-            <ListItem key={player.to.id} className={classes.detail}>
+        {invitesSent.map((invite) => (
+          <React.Fragment key={invite.to.id}>
+            <ListItem className={classes.detail}>
               <ListItemText
-                primary={player.to.name}
-                secondary={player.to.email}
+                primary={invite.to.name}
+                secondary={invite.to.email}
               />
               <ListItemText>
-                Status:{" "}
-                {player.status === "WAITING" ? "AGUARDANDO..." : "NÃO ACEITO"}
-                {player.status === "WAITING" ? (
+                {invite.status === "WAITING" && "AGUARDANDO..."}
+                {invite.status === "WAITING" && (
                   <CircularProgress color="secondary" />
-                ) : (
-                  ""
+                )}
+                {invite.status === "DECLINED" && "NÃO ACEITO"}
+                {invite.status === "ACCEPTED" && "ACEITO"}
+                {invite.status === "ACCEPTED" && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.begin}
+                    onClick={() => beginGame(invite.game.id)}
+                  >
+                    Iniciar Jogo
+                  </Button>
                 )}
               </ListItemText>
             </ListItem>
             <Divider variant="inset" component="li" />
-          </>
+          </React.Fragment>
         ))}
       </List>
     </>

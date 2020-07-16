@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
   const classes = useStyles();
-  const { logoutUser, player } = props;
+  const { logoutUser, player, invitesReceived } = props;
 
   return (
     <div className={classes.grow}>
@@ -42,7 +42,7 @@ const Header = (props) => {
               Bem vindo, {player.name}
             </IconButton>
             <IconButton color="inherit">
-              <Badge badgeContent={0} color="secondary">
+              <Badge badgeContent={invitesReceived} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
