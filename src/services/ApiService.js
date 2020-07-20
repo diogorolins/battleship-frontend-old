@@ -72,5 +72,14 @@ const ApiService = {
     await api.get(`games/${gameId}`, {
       headers: { Authorization: "Bearer " + token },
     }),
+  getStrikesByGame: async (gameId, token) =>
+    await api.get(`games/strike/${gameId}`, {
+      headers: { Authorization: "Bearer " + token },
+    }),
+  strike: async (strike, token) => {
+    return await api.post("games/strike", strike, {
+      headers: { Authorization: "Bearer " + token },
+    });
+  },
 };
 export default ApiService;

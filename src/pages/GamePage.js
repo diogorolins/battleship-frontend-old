@@ -5,6 +5,12 @@ import { logout, getToken, isAuthenticated } from "../services/AuthService";
 import Header from "../components/Header";
 import TableAd from "../components/TableAd";
 import TableUser from "../components/TableUser";
+import StrikeForm from "../components/StrikeForm";
+import { table } from "../services/TableGameServices";
+import Snack from "../services/SnackService";
+
+const col = table.col;
+const rol = table.rol;
 
 class Game extends React.Component {
   state = {
@@ -14,21 +20,96 @@ class Game extends React.Component {
       email: "",
     },
     gameData: "",
+    strikesReceived: [],
+    strikesMade: [],
+    strikeField: "",
+    openSnack: false,
+    severity: "error",
+    errors: [],
   };
   token = getToken().token;
   game = 1; //this.props.location.state.game;
 
-  async componentDidMount() {
+  componentDidMount() {
     if (!isAuthenticated()) {
       this.props.history.push("/");
     } else {
+      this.getPlayer();
+      this.getGameData();
+    }
+  }
+
+  fillStrikeField = (event) => {
+    const { value } = event.target;
+    if (isNaN(value)) {
+      this.setState({
+        strikeField: value.toUpperCase(),
+      });
+    } else {
+      this.setState({
+        strikeField: value,
+      });
+    }
+  };
+
+  strike = async () => {
+    if (this.checkStrikeIsValid()) {
+      const strike = {
+        game: { id: this.game },
+        player: {
+          id: this.state.gameData.players.filter(
+            (p) => p.id !== this.state.player.id
+          )[0].id,
+        },
+        position: this.state.strikeField,
+      };
+
+      const response = await ApiService.strike(strike, this.token);
+      if (response.data.hit) {
+        this.setState({
+          openSnack: true,
+          severity: "success",
+          errors: ["Você acertou um barco do adversário."],
+        });
+      } else {
+        this.setState({
+          openSnack: true,
+          severity: "error",
+          errors: ["Você acertou a água."],
+        });
+      }
+    }
+  };
+
+  checkStrikeIsValid = () => {
+    var numbers = [];
+    var letters = [];
+    const strike = this.state.strikeField.split(" ");
+
+    strike.forEach((s) => numbers.push(parseInt(s.replace(/[^0-9]/g, ""))));
+    strike.forEach((s) => letters.push(s.replace(/[^A-Z]/g, "")));
+    const numberExists = col.includes(parseInt(numbers.join("")));
+    const letterExists = rol.includes(letters.join(""));
+
+    if (numberExists && letterExists) {
+      return true;
+    }
+    return false;
+  };
+
+  getGameData = async () => {
+    try {
       const response = await ApiService.getGame(this.game, this.token);
       this.setState({
         gameData: response.data,
       });
-      this.getPlayer();
+      this.getStrikesReceived();
+      this.getStrikesMade();
+    } catch (e) {
+      console.log(e);
     }
-  }
+    // this.getGameData();
+  };
 
   getPlayer = async () => {
     try {
@@ -48,6 +129,33 @@ class Game extends React.Component {
     }
   };
 
+  getStrikesReceived = async () => {
+    try {
+      const response = await ApiService.getStrikesByGame(this.game, this.token);
+      const strikesReceived = response.data.filter(
+        (s) => s.player.id === this.state.player.id && s.hit === false
+      );
+      this.setState({
+        strikesReceived,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  getStrikesMade = async () => {
+    try {
+      const response = await ApiService.getStrikesByGame(this.game, this.token);
+      this.setState({
+        strikesMade: response.data.filter(
+          (s) => s.player.id !== this.state.player.id
+        ),
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   logoutUser = async (id) => {
     try {
       await ApiService.logoff(id, this.token);
@@ -58,17 +166,51 @@ class Game extends React.Component {
     }
   };
 
+  closeSnack = () => {
+    this.setState({
+      openSnack: false,
+    });
+  };
+
   render() {
-    const { player, gameData } = this.state;
+    const {
+      player,
+      gameData,
+      strikesReceived,
+      strikesMade,
+      strikeField,
+      openSnack,
+      severity,
+      errors,
+    } = this.state;
     return (
       <>
         <Header logoutUser={this.logoutUser} player={player} />
+        <Snack
+          openSnack={openSnack}
+          closeSnack={this.closeSnack}
+          message={errors}
+          severity={severity}
+          invitesReceived={0}
+        />
         <Grid container spacing={5} justify="center">
           <Grid item>
-            <TableUser ships={gameData.ships} player={player.id} />
+            <TableUser
+              ships={gameData.ships}
+              player={player.id}
+              strikesReceived={strikesReceived}
+            />
+            <StrikeForm
+              playerTurn={
+                gameData.playerTurn ? gameData.playerTurn.id === player.id : ""
+              }
+              strike={this.strike}
+              fillStrikeField={this.fillStrikeField}
+              strikeField={strikeField}
+            />
           </Grid>
           <Grid item>
-            <TableAd />
+            <TableAd strikesMade={strikesMade} />
           </Grid>
         </Grid>
       </>

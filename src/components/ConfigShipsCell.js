@@ -1,6 +1,8 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { colorCell } from "../services/ColorService";
+
 const useStyles = makeStyles((theme) => ({
   root: {},
   rol: {
@@ -22,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "4px",
     fontWeight: "bold",
     cursor: "pointer",
-    backgroundColor: "blue",
+    backgroundColor: colorCell.config.selected,
     opacity: "70%",
   },
   rolDone: {
@@ -34,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "4px",
     fontWeight: "bold",
     cursor: "pointer",
-    backgroundColor: "green",
+    backgroundColor: colorCell.config.finished,
     opacity: "70%",
   },
 }));

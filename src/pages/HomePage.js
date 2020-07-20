@@ -56,7 +56,7 @@ class Home extends React.Component {
     this.setState({
       loggedPlayers: response.data,
     });
-    this.getLoggedPlayers();
+    //this.getLoggedPlayers();
   };
 
   invitePlayer = async (playerId) => {
@@ -76,7 +76,7 @@ class Home extends React.Component {
     this.setState({
       invitesSent: response.data,
     });
-    this.invitesSent();
+    //this.invitesSent();
   };
 
   invitesReceived = async () => {
@@ -84,7 +84,7 @@ class Home extends React.Component {
     this.setState({
       invitesReceived: response.data,
     });
-    this.invitesReceived();
+    // this.invitesReceived();
   };
 
   logoutUser = async (id) => {

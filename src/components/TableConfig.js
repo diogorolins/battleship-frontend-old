@@ -1,9 +1,10 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ConfigShipsCell from "./ConfigShipsCell";
+import { table } from "../services/TableGameServices";
 
-const col = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const rol = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+const col = table.col;
+const rol = table.rol;
 
 const useStyles = makeStyles((theme) => ({
   root: {

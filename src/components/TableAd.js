@@ -1,9 +1,10 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CellAd from "./CellAd";
+import { table } from "../services/TableGameServices";
 
-const col = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const rol = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+const col = table.col;
+const rol = table.rol;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TableAd = () => {
+const TableAd = (props) => {
   const classes = useStyles();
-
+  const { strikesMade } = props;
   return (
     <>
       <h1 className={classes.h1}>Tabuleiro do adversário</h1>
@@ -41,7 +42,7 @@ const TableAd = () => {
           {col.map((c) => (
             <tr key={c} className={classes.col}>
               {rol.map((r) => (
-                <CellAd key={r} cellId={r + c} />
+                <CellAd key={r} cellId={r + c} strikesMade={strikesMade} />
               ))}
             </tr>
           ))}

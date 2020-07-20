@@ -26,19 +26,23 @@ class GameConfig extends React.Component {
     waiting: false,
   };
   token = getToken().token;
-  game = 1; //this.props.location.state.game;
+  game = this.props.location.state.game;
 
-  async componentDidMount() {
+  componentDidMount() {
     if (!isAuthenticated()) {
       this.props.history.push("/");
     } else {
-      const response = await ApiService.getShipTypes(this.token);
-      this.setState({
-        shipTypes: response.data,
-      });
+      this.getShipTypes();
       this.getPlayer();
     }
   }
+
+  getShipTypes = async () => {
+    const response = await ApiService.getShipTypes(this.token);
+    this.setState({
+      shipTypes: response.data,
+    });
+  };
 
   goToNextShip = (type) => {
     if (this.checkShipComplete(this.state.selectedCells, type)) {
@@ -94,7 +98,7 @@ class GameConfig extends React.Component {
         state: { game: this.game },
       });
     }
-    this.waitForUser();
+    //this.waitForUser();
   };
 
   checkShipComplete = (cells, type) => {
