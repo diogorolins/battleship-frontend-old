@@ -86,8 +86,11 @@ class GameConfig extends React.Component {
       this.setState({
         waiting: true,
       });
-      this.waitForUser();
     }
+  };
+
+  refresh = () => {
+    this.waitForUser();
   };
 
   waitForUser = async () => {
@@ -98,7 +101,6 @@ class GameConfig extends React.Component {
         state: { game: this.game },
       });
     }
-    //this.waitForUser();
   };
 
   checkShipComplete = (cells, type) => {
@@ -253,6 +255,7 @@ class GameConfig extends React.Component {
           goToNextShip={this.goToNextShip}
           startGame={this.startGame}
           waiting={waiting}
+          refresh={this.refresh}
         />
       </>
     );

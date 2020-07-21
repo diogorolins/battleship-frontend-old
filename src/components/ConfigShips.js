@@ -18,7 +18,14 @@ const useStyles = makeStyles((theme) => ({
 
 const ConfigShips = (props) => {
   const classes = useStyles();
-  const { shipTypes, shipAtivo, goToNextShip, startGame, waiting } = props;
+  const {
+    shipTypes,
+    shipAtivo,
+    goToNextShip,
+    startGame,
+    waiting,
+    refresh,
+  } = props;
 
   return (
     <div>
@@ -45,6 +52,14 @@ const ConfigShips = (props) => {
             <LinearProgress />
             <h1 className={classes.h1}>Aguardando o outo jogador</h1>
             <LinearProgress />
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={refresh}
+              fullWidth
+            >
+              Atualizar
+            </Button>
           </>
         )
       ) : (

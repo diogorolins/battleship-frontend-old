@@ -38,6 +38,7 @@ const InvitesReceived = (props) => {
   return (
     <div className={classes.root}>
       <h1 className={classes.h1}>Convites Recebidos</h1>
+
       {invitesReceived &&
         invitesReceived.map((invite) => (
           <Accordion key={invite.from.id}>

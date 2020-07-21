@@ -1,6 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 
+import Button from "@material-ui/core/Button";
 import ApiService from "../services/ApiService";
 import Header from "../components/Header";
 import { isAuthenticated, logout, getToken } from "../services/AuthService";
@@ -20,18 +21,26 @@ class Home extends React.Component {
     invitesReceived: [],
     gameId: "",
   };
-  token = getToken().token;
+
+  token = "";
 
   componentDidMount() {
     if (!isAuthenticated()) {
       this.props.history.push("/");
     } else {
+      this.token = getToken().token;
       this.getPlayer();
       this.getLoggedPlayers();
       this.invitesSent();
       this.invitesReceived();
     }
   }
+
+  refresh = () => {
+    this.getLoggedPlayers();
+    this.invitesSent();
+    this.invitesReceived();
+  };
 
   getPlayer = async () => {
     try {
@@ -56,6 +65,7 @@ class Home extends React.Component {
     this.setState({
       loggedPlayers: response.data,
     });
+    //setTimeout(this.getLoggedPlayers(), 5000);
     //this.getLoggedPlayers();
   };
 
@@ -76,6 +86,7 @@ class Home extends React.Component {
     this.setState({
       invitesSent: response.data,
     });
+    //setTimeout(this.invitesSent(), 5000);
     //this.invitesSent();
   };
 
@@ -84,6 +95,7 @@ class Home extends React.Component {
     this.setState({
       invitesReceived: response.data,
     });
+    //setTimeout(this.invitesReceived(), 5000);
     // this.invitesReceived();
   };
 
@@ -134,6 +146,7 @@ class Home extends React.Component {
           player={player}
           invitesReceived={invitesReceived.length}
         />
+
         <InvitesReceived
           invitesReceived={invitesReceived}
           declineInvite={this.declineInvite}
@@ -145,6 +158,14 @@ class Home extends React.Component {
           invitesSent={invitesSent}
         />
         <InvitedSent invitesSent={invitesSent} beginGame={this.beginGame} />
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={this.refresh}
+          fullWidth
+        >
+          Atualizar
+        </Button>
       </>
     );
   }

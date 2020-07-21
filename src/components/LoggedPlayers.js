@@ -39,6 +39,7 @@ const LoggedPlayers = (props) => {
   return (
     <>
       <h1 className={classes.h1}>Jogadores Online</h1>
+
       <List className={classes.root}>
         {loggedPlayers.map((player) => (
           <React.Fragment key={player.id}>

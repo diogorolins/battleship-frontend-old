@@ -36,6 +36,7 @@ const InvitedSent = (props) => {
   return (
     <>
       <h1 className={classes.h1}>Convites Enviados</h1>
+
       <List className={classes.root}>
         {invitesSent.map((invite) => (
           <React.Fragment key={invite.to.id}>

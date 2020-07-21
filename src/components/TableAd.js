@@ -16,13 +16,6 @@ const useStyles = makeStyles((theme) => ({
   col: {
     border: "2px solid red",
   },
-  rol: {
-    border: "2px solid red",
-    textAlign: "center",
-    color: "red",
-    borderRadius: "4px",
-    fontWeight: "bold",
-  },
   h1: {
     textAlign: "center",
     fontSize: theme.typography.pxToRem(20),

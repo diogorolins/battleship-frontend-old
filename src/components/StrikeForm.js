@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   h1: {
     textAlign: "center",
-    fontSize: theme.typography.pxToRem(20),
+    fontSize: theme.typography.pxToRem(16),
     fontWeight: theme.typography.fontWeightBold,
     color: "red",
   },
@@ -29,7 +29,14 @@ const useStyles = makeStyles((theme) => ({
 
 const StrikeForm = (props) => {
   const classes = useStyles();
-  const { playerTurn, strike, fillStrikeField, strikeField } = props;
+  const {
+    playerTurn,
+    strike,
+    fillStrikeField,
+    strikeField,
+    refresh,
+    dataCharged,
+  } = props;
   const inputProps = {
     maxLength: 3,
   };
@@ -60,7 +67,19 @@ const StrikeForm = (props) => {
       ) : (
         <>
           <h1 className={classes.h1}>Aguarde o ataque inimigo</h1>
-          <LinearProgress color="secondary" />
+
+          {dataCharged ? (
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={refresh}
+              fullWidth
+            >
+              Atualizar
+            </Button>
+          ) : (
+            <LinearProgress color="secondary" />
+          )}
         </>
       )}
     </>

@@ -26,6 +26,7 @@ class Game extends React.Component {
     openSnack: false,
     severity: "error",
     errors: [],
+    dataCharged: false,
   };
   token = getToken().token;
   game = 1; //this.props.location.state.game;
@@ -65,19 +66,54 @@ class Game extends React.Component {
       };
 
       const response = await ApiService.strike(strike, this.token);
-      if (response.data.hit) {
-        this.setState({
-          openSnack: true,
-          severity: "success",
-          errors: ["Você acertou um barco do adversário."],
-        });
-      } else {
-        this.setState({
-          openSnack: true,
-          severity: "error",
-          errors: ["Você acertou a água."],
-        });
-      }
+      this.checkIfStrikeGetShip(response.data);
+
+      this.getGameData();
+    } else {
+      this.setState({
+        openSnack: true,
+        severity: "error",
+        errors: ["Valor inválido para o ataque."],
+      });
+    }
+  };
+
+  checkIfShipWasDestroyed = (strike) => {
+    const ships = strike.game.ships.filter(
+      (p) => p.player.id !== this.state.player.id
+    );
+    const shipStriked = ships.filter((s) =>
+      s.position.map((m) => m.position).includes(strike.position)
+    )[0];
+
+    const shipWasDestroyed = shipStriked.position.filter(
+      (s) => s.hit === "CLEAN"
+    );
+
+    if (shipWasDestroyed.length > 0) {
+      this.setState({
+        openSnack: true,
+        severity: "warning",
+        errors: ["Você acertou um barco do adversário."],
+      });
+    } else {
+      this.setState({
+        openSnack: true,
+        severity: "success",
+        errors: ["Você destruiu um barco do adversário."],
+      });
+    }
+  };
+
+  checkIfStrikeGetShip = (strike) => {
+    if (strike.hit) {
+      this.checkIfShipWasDestroyed(strike);
+    } else {
+      this.setState({
+        openSnack: true,
+        severity: "info",
+        errors: ["Você acertou a água."],
+      });
     }
   };
 
@@ -102,13 +138,18 @@ class Game extends React.Component {
       const response = await ApiService.getGame(this.game, this.token);
       this.setState({
         gameData: response.data,
+        strikeField: "",
+        dataCharged: true,
       });
       this.getStrikesReceived();
       this.getStrikesMade();
     } catch (e) {
       console.log(e);
     }
-    // this.getGameData();
+  };
+
+  refresh = () => {
+    this.getGameData();
   };
 
   getPlayer = async () => {
@@ -182,6 +223,7 @@ class Game extends React.Component {
       openSnack,
       severity,
       errors,
+      dataCharged,
     } = this.state;
     return (
       <>
@@ -207,6 +249,8 @@ class Game extends React.Component {
               strike={this.strike}
               fillStrikeField={this.fillStrikeField}
               strikeField={strikeField}
+              refresh={this.refresh}
+              dataCharged={dataCharged}
             />
           </Grid>
           <Grid item>
