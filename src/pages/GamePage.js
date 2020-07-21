@@ -29,7 +29,7 @@ class Game extends React.Component {
     dataCharged: false,
   };
   token = getToken().token;
-  game = 1; //this.props.location.state.game;
+  game = this.props.location.state.game;
 
   componentDidMount() {
     if (!isAuthenticated()) {
@@ -67,7 +67,6 @@ class Game extends React.Component {
 
       const response = await ApiService.strike(strike, this.token);
       this.checkIfStrikeGetShip(response.data);
-
       this.getGameData();
     } else {
       this.setState({
