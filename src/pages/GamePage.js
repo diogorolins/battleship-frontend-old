@@ -3,13 +3,12 @@ import Grid from "@material-ui/core/Grid";
 import ApiService from "../services/ApiService";
 import { logout, getToken, isAuthenticated } from "../services/AuthService";
 import Header from "../components/Header";
-import TableAd from "../components/TableAd";
-import TableUser from "../components/TableUser";
-import StrikeForm from "../components/StrikeForm";
+import TableAd from "../components/game/TableAd";
+import TableUser from "../components/game/TableUser";
+import StrikeForm from "../components/game/StrikeForm";
 import { table } from "../services/TableGameServices";
 import Snack from "../services/SnackService";
-
-import Winner from "../components/Winner";
+import Winner from "../components/game/Winner";
 
 const col = table.col;
 const rol = table.rol;

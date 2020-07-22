@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CellAd from "./CellAd";
-import { table } from "../services/TableGameServices";
+import { table } from "../../services/TableGameServices";
 
 const col = table.col;
 const rol = table.rol;

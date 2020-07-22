@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { colorCell } from "../services/ColorService";
+import { colorCell } from "../../services/ColorService";
 
 const useStyles = makeStyles((theme) => ({
   root: {},

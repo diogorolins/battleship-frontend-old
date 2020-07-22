@@ -4,8 +4,8 @@ import { withRouter } from "react-router-dom";
 import ApiService from "../services/ApiService";
 import Header from "../components/Header";
 import { logout, getToken, isAuthenticated } from "../services/AuthService";
-import TableConfig from "../components/TableConfig";
-import ConfigShips from "../components/ConfigShips";
+import TableConfig from "../components/gameConfig/TableConfig";
+import ConfigShips from "../components/gameConfig/ConfigShips";
 import Snack from "../services/SnackService";
 
 class GameConfig extends React.Component {

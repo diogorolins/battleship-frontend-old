@@ -5,9 +5,9 @@ import Button from "@material-ui/core/Button";
 import ApiService from "../services/ApiService";
 import Header from "../components/Header";
 import { isAuthenticated, logout, getToken } from "../services/AuthService";
-import LoggedPlayers from "../components/LoggedPlayers";
-import InvitedSent from "../components/InvitedSent";
-import InvitesReceived from "../components/InvitesReceived";
+import LoggedPlayers from "../components/home/LoggedPlayers";
+import InvitesSent from "../components/home/InvitesSent";
+import InvitesReceived from "../components/home/InvitesReceived";
 
 class Home extends React.Component {
   state = {
@@ -157,7 +157,7 @@ class Home extends React.Component {
           invitePlayer={this.invitePlayer}
           invitesSent={invitesSent}
         />
-        <InvitedSent invitesSent={invitesSent} beginGame={this.beginGame} />
+        <InvitesSent invitesSent={invitesSent} beginGame={this.beginGame} />
         <Button
           variant="contained"
           color="secondary"

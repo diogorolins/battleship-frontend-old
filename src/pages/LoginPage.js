@@ -3,8 +3,8 @@ import { withRouter } from "react-router-dom";
 
 import FormValidation from "../services/FormValidation";
 import { login, isAuthenticated } from "../services/AuthService";
-import LoginForm from "../components/LoginForm";
-import Signin from "../components/SigninForm";
+import LoginForm from "../components/login/LoginForm";
+import Signin from "../components/login/SigninForm";
 import ApiService from "../services/ApiService";
 import Snack from "../services/SnackService";
 
