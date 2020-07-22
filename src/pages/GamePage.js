@@ -33,7 +33,7 @@ class Game extends React.Component {
     winner: "",
   };
   token = getToken().token;
-  game = 1; //this.props.location.state.game;
+  game = this.props.location.state.game;
 
   componentDidMount() {
     if (!isAuthenticated()) {
